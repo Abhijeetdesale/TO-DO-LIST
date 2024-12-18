@@ -1,0 +1,105 @@
+import os
+
+class ToDoList:
+    def __init__(self):
+        self.tasks = []
+
+    def display_tasks(self):
+        """Display the current list of tasks."""
+        if not self.tasks:
+            print("\nYour to-do list is empty.\n")
+            return
+        print("\nYour To-Do List:")
+        for idx, task in enumerate(self.tasks, start=1):
+            status = "✓" if task['completed'] else "✗"
+            print(f"{idx}. {task['description']} [{status}]")
+        print()
+
+    def add_task(self, description):
+        """Add a new task to the list."""
+        self.tasks.append({"description": description, "completed": False})
+        print(f"Task '{description}' added successfully!\n")
+
+    def update_task(self, task_number, new_description):
+        """Update the description of an existing task."""
+        if 1 <= task_number <= len(self.tasks):
+            self.tasks[task_number - 1]['description'] = new_description
+            print(f"Task {task_number} updated successfully!\n")
+        else:
+            print("Invalid task number!\n")
+
+    def mark_task_as_done(self, task_number):
+        """Mark a task as completed."""
+        if 1 <= task_number <= len(self.tasks):
+            self.tasks[task_number - 1]['completed'] = True
+            print(f"Task {task_number} marked as done!\n")
+        else:
+            print("Invalid task number!\n")
+
+    def delete_task(self, task_number):
+        """Delete a task from the list."""
+        if 1 <= task_number <= len(self.tasks):
+            removed_task = self.tasks.pop(task_number - 1)
+            print(f"Task '{removed_task['description']}' deleted successfully!\n")
+        else:
+            print("Invalid task number!\n")
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def main():
+    todo_list = ToDoList()
+    while True:
+        clear_screen()
+        todo_list.display_tasks()
+        print("Options:")
+        print("1. Add a task")
+        print("2. Update a task")
+        print("3. Mark a task as done")
+        print("4. Delete a task")
+        print("5. Exit")
+        choice = input("Choose an option (1-5): ").strip()
+
+        if choice == "1":
+            task_desc = input("Enter the task description: ").strip()
+            if task_desc:
+                todo_list.add_task(task_desc)
+            else:
+                print("Task description cannot be empty!\n")
+
+        elif choice == "2":
+            try:
+                task_num = int(input("Enter the task number to update: "))
+                new_desc = input("Enter the new description: ").strip()
+                if new_desc:
+                    todo_list.update_task(task_num, new_desc)
+                else:
+                    print("New description cannot be empty!\n")
+            except ValueError:
+                print("Please enter a valid number!\n")
+
+        elif choice == "3":
+            try:
+                task_num = int(input("Enter the task number to mark as done: "))
+                todo_list.mark_task_as_done(task_num)
+            except ValueError:
+                print("Please enter a valid number!\n")
+
+        elif choice == "4":
+            try:
+                task_num = int(input("Enter the task number to delete: "))
+                todo_list.delete_task(task_num)
+            except ValueError:
+                print("Please enter a valid number!\n")
+
+        elif choice == "5":
+            print("Thank you for using the To-Do List application. Goodbye!")
+            break
+
+        else:
+            print("Invalid choice! Please select a valid option.\n")
+
+        input("Press Enter to continue...")
+
+if __name__ == "__main__":
+    main()
